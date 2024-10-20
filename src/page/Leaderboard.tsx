@@ -25,7 +25,11 @@ const Leaderboard: React.FC<ILeaderboardProps> = ({ user }) => {
     setLoading(true);
     if (user) {
       try {
-        const { data } = await axios.get(`${ENDPOINT}/api/user/top/${user.id}`);
+        const { data } = await axios.get(`${ENDPOINT}/api/user/top/${user.id}`, {
+          headers: {
+            "ngrok-skip-browser-warning": "true",
+          },
+        });
         console.log("loading data > ", data);
         setUsers((prev) => [...prev, ...data.topUsers]);
         setTotalUsersCount(data.totalMembers);

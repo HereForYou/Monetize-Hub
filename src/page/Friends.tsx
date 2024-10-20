@@ -26,12 +26,12 @@ const Friends = ({ user, inviteRevenue, modal }: { user: any; inviteRevenue: num
     if (!hasShownWarningRef.current && user) {
       setLoading(true);
       axios
-        // .get(`${ENDPOINT}/api/user/friend/${user?.id}`, {
-        //   headers: {
-        //     "ngrok-skip-browser-warning": "true", // or any value you prefer
-        //   },
-        // })
-        .get(`${ENDPOINT}/api/user/friend/${user?.id}`)
+        .get(`${ENDPOINT}/api/user/friend/${user?.id}`, {
+          headers: {
+            "ngrok-skip-browser-warning": "true", // or any value you prefer
+          },
+        })
+        // .get(`${ENDPOINT}/api/user/friend/${user?.id}`)
         .then((res) => {
           console.log("friends > res.data", res.data);
           setFriends(res.data.friendsInfo);
@@ -63,7 +63,7 @@ const Friends = ({ user, inviteRevenue, modal }: { user: any; inviteRevenue: num
   return (
     <div className='flex flex-col friends-content w-full justify-start px-5 gap-2 overflow-y-auto overflow-x-hidden hiddenScrollBar'>
       <div className='w-full flex flex-col items-center justify-center pt-20 gap-4'>
-        <p>Invite friends and get more efund</p>
+        <p className="text-lg font-extrabold">Invite friends and get more points</p>
         <img src='/back.jpg' alt='friends_bg' loading='lazy' className='w-2/3' />
       </div>
       <div className='flex flex-col'>
@@ -77,7 +77,7 @@ const Friends = ({ user, inviteRevenue, modal }: { user: any; inviteRevenue: num
           })
         ) : (
           <div>
-            <h4 className='py-2 text-white'>Tap on the button to invite your friends</h4>
+            <h4 className='py-2 text-white text-lg font-extrabold'>Tap on the button to invite your friends</h4>
           </div>
         )}
       </div>
