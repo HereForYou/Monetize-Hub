@@ -25,14 +25,7 @@ const Leaderboard: React.FC<ILeaderboardProps> = ({ user }) => {
     setLoading(true);
     if (user) {
       try {
-        const { data } = await axios.get(
-          `${ENDPOINT}/api/user/top/${user.id}`,
-          {
-            headers: {
-              "ngrok-skip-browser-warning": "true", // or any value you prefer
-            },
-          }
-        );
+        const { data } = await axios.get(`${ENDPOINT}/api/user/top/${user.id}`);
         console.log("loading data > ", data);
         setUsers((prev) => [...prev, ...data.topUsers]);
         setTotalUsersCount(data.totalMembers);
@@ -62,9 +55,7 @@ const Leaderboard: React.FC<ILeaderboardProps> = ({ user }) => {
         {/* <div className="customCard-container w-full"> */}
         <div className='group pt-6 transition relative duration-300 cursor-default hover:shadow-[0 -8px 0px 0px #2196f3]'>
           {/* <h2 className="text-[24px] font-extrabold">Top {users.length} $BuffyDrop Miners</h2> */}
-          <h2 className='text-3xl font-extrabold pt-4'>
-            Telegram Wall of Fame
-          </h2>
+          <h2 className='text-3xl font-extrabold pt-4'>Telegram Wall of Fame</h2>
         </div>
         {/* </div > */}
         {loading ? (
@@ -73,8 +64,7 @@ const Leaderboard: React.FC<ILeaderboardProps> = ({ user }) => {
           </div>
         ) : (
           <div>
-            <div
-              className={`flex my-3 px-3 py-2 items-center text-[#acacac] bg-[#110d33] rounded-lg w-full`}>
+            <div className={`flex my-3 px-3 py-2 items-center text-[#acacac] bg-[#110d33] rounded-lg w-full`}>
               <div className='w-full flex flex-row gap-1 items-center'>
                 <div
                   className={`h-8 w-8 rounded-full text-center flex justify-center items-center ${
@@ -83,22 +73,15 @@ const Leaderboard: React.FC<ILeaderboardProps> = ({ user }) => {
                   {curUser?.userName.substring(0, 2).toUpperCase()}
                 </div>
                 <div className='flex flex-col'>
-                  <p className='text-xs text-white text-start pl-2'>
-                    {curUser?.userName}
-                  </p>
+                  <p className='text-xs text-white text-start pl-2'>{curUser?.userName}</p>
                   <p className='text-[8px] text-start pl-2'>
-                    {formatNumberWithCommas(curUser?.totalPoints) + " BUFFY"}
+                    {formatNumberWithCommas(curUser?.totalPoints) + " Point"}
                   </p>
                 </div>
               </div>
               <div className='text-xs text-center flex justify-center w-[15%]'>
                 {ranking == 1 || ranking == 2 || ranking == 3 ? (
-                  <img
-                    src={`/rank_${ranking}.webp`}
-                    loading='lazy'
-                    alt='rank'
-                    className='w-4 h-6'
-                  />
+                  <img src={`/rank_${ranking}.webp`} loading='lazy' alt='rank' className='w-4 h-6' />
                 ) : (
                   "#" + ranking
                 )}
@@ -111,9 +94,7 @@ const Leaderboard: React.FC<ILeaderboardProps> = ({ user }) => {
               </div>
               <div className='h-[62vh] overflow-auto w-full' ref={scrollRef}>
                 {users?.map((iUser: any, index) => (
-                  <div
-                    key={index}
-                    className={`flex px-2 py-1 items-center text-[#acacac] w-full`}>
+                  <div key={index} className={`flex px-2 py-1 items-center text-[#acacac] w-full`}>
                     <div className='relative h-10 overflow-hidden w-[100%] flex items-center'>
                       <div
                         className={`h-8 w-8 rounded-full text-center flex justify-center items-center ${
@@ -123,20 +104,12 @@ const Leaderboard: React.FC<ILeaderboardProps> = ({ user }) => {
                       </div>
                       <div className='pl-4 text-start'>
                         <p className='text-xs text-white'>{iUser?.userName}</p>
-                        <p className='text-[8px]'>
-                          {formatNumberWithCommas(iUser?.totalPoints) +
-                            " BUFFY"}
-                        </p>
+                        <p className='text-[8px]'>{formatNumberWithCommas(iUser?.totalPoints) + " Point"}</p>
                       </div>
                     </div>
                     <div className='text-xs text-center flex justify-center w-[15%]'>
                       {index + 1 == 1 || index + 1 == 2 || index + 1 == 3 ? (
-                        <img
-                          src={`/rank_${index + 1}.webp`}
-                          alt='rank'
-                          loading='lazy'
-                          className='w-4 h-6'
-                        />
+                        <img src={`/rank_${index + 1}.webp`} alt='rank' loading='lazy' className='w-4 h-6' />
                       ) : (
                         "#" + (index + 1)
                       )}

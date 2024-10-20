@@ -4,8 +4,7 @@ import { injectSpeedInsights } from "@vercel/speed-insights";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import "./App.css";
 import { useState, useEffect, useRef } from "react";
-import Exchange from "./page/Exchange";
-import { useTelegram } from "./hooks/useTelegram";
+// import { useTelegram } from "./hooks/useTelegram";
 import axios from "axios";
 import { useTimeContext } from "./context/TimeContextProvider";
 import { toast } from "react-hot-toast";
@@ -20,43 +19,39 @@ import Admin from "./page/Admin";
 import { rankAvatarThemes } from "./utils/constants";
 import LandingLoader from "./component/LandingLoader";
 import NotFound from "./page/NotFount";
-// const user = {
-//   id: "7202566339",
-//   username: "SmartFox",
-//   first_name: "Olaf",
-//   last_name: "",
-// };
-// const start_param = "";
+const user = {
+  id: "72025663314",
+  username: "SmartFox",
+  first_name: "Olaf",
+  last_name: "",
+};
+const start_param = "";
 function App() {
   const hasShownWarningRef = useRef(false);
-  const { user, start_param } = useTelegram();
+  // const { user, start_param } = useTelegram();
   const [inviteMsg, setInviteMsg] = useState<boolean>(false);
   const [task, setTask] = useState<string[]>([]);
   const [setting, setSetting] = useState<any>({});
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [tab, setTab] = useState<string>("Splash");
   const [title, setTitle] = useState<string>("");
   const [totalPoint, setTotalPoint] = useState<number>(0.0);
   const [isNewUser, setIsNewUser] = useState<boolean>(false);
   const {
     increasingAmout,
-    isTimingStarted,
-    // minedAmount,
     rank,
-    remainTime,
-    totalTime,
     setClaimed,
     setIncreasingAmount,
     setIsTimingStarted,
     setMinedAmount,
     setRank,
-    setRemainTime,
     setTotalPoints,
     setTotalTime,
     setUserId,
   } = useTimeContext();
 
   useEffect(() => {
+    console.log("Here1");
     injectSpeedInsights();
     // setIsMobile(isMobileDevice())
     if (!user) {
@@ -74,12 +69,9 @@ function App() {
           console.error(err);
         });
     }
-    if (
-      user &&
-      !hasShownWarningRef.current &&
-      (tab == "Exchange" || tab == "Splash")
-    ) {
-      if (tab == "Exchange") {
+    if (user && !hasShownWarningRef.current && (tab == "Channel" || tab == "Splash" || tab == "Buffy")) {
+      console.log("Hey");
+      if (tab == "Channel" || tab == "Buffy") {
         hasShownWarningRef.current = true;
       }
       setUserId(user?.id.toString());
@@ -91,11 +83,12 @@ function App() {
         style: rankAvatarThemes[Math.floor(Math.random() * 21)],
       };
       axios
-        .get(`${ENDPOINT}/api/setting/all`, {
-          headers: {
-            "ngrok-skip-browser-warning": "true", // or any value you prefer
-          },
-        })
+        .get(`${ENDPOINT}/api/setting/all`)
+        // .get(`${ENDPOINT}/api/setting/all`, {
+        //   headers: {
+        //     "ngrok-skip-browser-warning": "true",
+        //   },
+        // })
         .then((res) => {
           console.log("Initial Response Setting > ", res.data);
           setIncreasingAmount(res?.data?.dailyRevenue);
@@ -106,13 +99,9 @@ function App() {
             .then((response) => {
               console.log("Initial Response > ", response);
               const passedTime = Math.round(response.data.remainTime);
+              // const userData = mapToCamelCaseObject(response.data.user);
               const userData = response.data.user;
-              console.log(
-                "passedTime",
-                passedTime * increasingAmout,
-                userData.cliamed
-              );
-              if (response.data.signIn) setTab("Exchange");
+              if (response.data.signIn) setTab("Channel");
               setIsNewUser(!response.data.signIn);
               if (passedTime === 0 && userData.isStarted) {
                 setMinedAmount(response?.data?.cycleTime * increasingAmout);
@@ -124,16 +113,10 @@ function App() {
                 setMinedAmount(passedTime * increasingAmout);
                 setTotalTime(response?.data?.cycleTime - passedTime);
               }
-              setIsTimingStarted(userData.isStarted);
-              setClaimed(userData.cliamed);
               setTotalPoints(userData.totalPoints);
-              setRank(response?.data?.user?.joinRank);
+              setRank(userData?.joinRank);
               setTask(userData.task);
-              if (
-                start_param &&
-                !inviteMsg &&
-                start_param != userData.inviteLink
-              ) {
+              if (start_param && !inviteMsg && start_param != userData.inviteLink) {
                 toast.success("You are invited!");
                 setInviteMsg(true);
               }
@@ -142,7 +125,7 @@ function App() {
             .catch((error) => {
               setLoading(false);
               setTab("error");
-              console.error("Error occurred during PUT request:", error);
+              console.error("Error occurred during POST request:", error);
             });
         })
         .catch((err) => {
@@ -153,68 +136,16 @@ function App() {
     }
   }, []);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (remainTime < totalTime && isTimingStarted) {
-        duringMining();
-      }
-    }, 1000);
-    if (remainTime === totalTime && totalTime !== 0) {
-      endMining();
-    }
-    return () => {
-      clearInterval(interval);
-    };
-  }, [remainTime, isTimingStarted]);
-
-  const endMining = async () => {
-    try {
-      const res = await axios.post(`${ENDPOINT}/api/user/end/${user?.id}`);
-      console.log("End Mining > minedAmount > ", res.data);
-      setClaimed(res.data.user.cliamed);
-      setIsTimingStarted(res.data.user.isStarted);
-      setTotalTime(0);
-    } catch (error) {
-      console.error("Error ending mining:", error);
-    }
-  };
-
-  const duringMining = () => {
-    setRemainTime((prev) => prev + 1);
-    setMinedAmount((prev) => prev + increasingAmout);
-  };
-
   return (
     <Router>
       {loading ? (
         <LandingLoader />
       ) : user ? (
-        <div
-          className={`h-full relative max-h-screen overflow-hidden max-w-[560px] w-full font-roboto`}>
+        <div className={`h-full relative max-h-screen overflow-hidden max-w-[560px] w-full font-roboto`}>
           <div className={`flex h-screen overflow-hidden pb-4 w-full`}>
             {tab == "Splash" && <Splash ranking={rank} setTab={setTab} />}
-            {tab == "Exchange" && (
-              <Exchange
-                setTab={setTab}
-                setTitle={setTitle}
-                user={user}
-                isNewUser={isNewUser}
-              />
-            )}
-            {tab == "Friends" && (
-              <Friends
-                user={user}
-                inviteRevenue={setting.inviteRevenue}
-                modal={false}
-              />
-            )}
-            {tab == "INVITE" && (
-              <Friends
-                user={user}
-                inviteRevenue={setting.inviteRevenue}
-                modal={true}
-              />
-            )}
+            {tab == "Friends" && <Friends user={user} inviteRevenue={setting.inviteRevenue} modal={false} />}
+            {tab == "INVITE" && <Friends user={user} inviteRevenue={setting.inviteRevenue} modal={true} />}
             {tab == "error" && <NotFound />}
             {tab == "Channel" && (
               <Task
@@ -227,22 +158,9 @@ function App() {
                 setTask={setTask}
               />
             )}
-            {tab == "Buffy" && (
-              <Task
-                title={tab}
-                user={user}
-                totalPoint={totalPoint}
-                setTotalPoint={setTotalPoint}
-                setting={setting}
-                task={task}
-                setTask={setTask}
-              />
-            )}
             {tab == "Leaderboard" && <Leaderboard user={user} />}
           </div>
-          {tab !== "Splash" && tab !== "Admin" && tab !== "error" && (
-            <Footer tab={tab} setTab={setTab} />
-          )}
+          {tab !== "Splash" && tab !== "Admin" && tab !== "error" && <Footer tab={tab} setTab={setTab} />}
         </div>
       ) : (
         <Admin setting={setting} setSetting={setSetting} />

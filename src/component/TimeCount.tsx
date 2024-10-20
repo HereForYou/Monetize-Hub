@@ -2,12 +2,7 @@ import { useMemo, useState } from "react";
 import axios from "axios";
 import { AnimatedCounter } from "react-animated-counter";
 import ConfettiExplosion from "react-confetti-explosion";
-import {
-  getHours,
-  getMinutes,
-  formatMiningNumber,
-  getSeconds,
-} from "../utils/functions";
+import { getHours, getMinutes, formatMiningNumber, getSeconds, mapToCamelCaseObject } from "../utils/functions";
 import { useTimeContext } from "../context/TimeContextProvider";
 import { ENDPOINT } from "../data";
 
@@ -45,22 +40,24 @@ const TimeCount = () => {
     setIsClaimed(true);
 
     try {
-      const { data } = await axios.get(
-        `${ENDPOINT}/api/user/updatepoints/${userId}`,
-        {
-          headers: {
-            "ngrok-skip-browser-warning": "true",
-          },
-        }
-      );
-
+      // const { data } = await axios.get( // for Express.js backend
+      //   `${ENDPOINT}/api/user/updatepoints/${userId}`,
+      //   {
+      //     headers: {
+      //       "ngrok-skip-browser-warning": "true",
+      //     },
+      //   }
+      // );
+      const { data } = await axios.get(`${ENDPOINT}/api/user/updatepoints/${userId}`); // for golang backend
       console.log("Receive Amount Response > ", data);
-      setTotalTime(data.remainTime);
+      const camelCaseData = mapToCamelCaseObject(data);
+
+      setTotalTime(camelCaseData.remainTime);
       setRemainTime(0);
-      setTotalPoints(data.user.totalPoints);
+      setTotalPoints(camelCaseData.user.totalPoints);
       setMinedAmount(0);
-      setClaimed(data.user.cliamed);
-      setIsTimingStarted(data.user.isStarted);
+      setClaimed(camelCaseData.user.cliamed);
+      setIsTimingStarted(camelCaseData.user.isStarted);
     } catch (err) {
       console.error("Receive Amount Error > ", err);
       // Consider adding user feedback here
@@ -73,9 +70,10 @@ const TimeCount = () => {
     try {
       const { data } = await axios.post(`${ENDPOINT}/api/user/start/${userId}`);
       console.log("Start Farming Response > ", data);
-      setIsTimingStarted(data.user.isStarted);
-      setTotalTime(data.cycleTime);
-      setClaimed(data.user.cliamed);
+      const camelCaseData = mapToCamelCaseObject(data);
+      setIsTimingStarted(camelCaseData.user.isStarted);
+      setTotalTime(camelCaseData.cycleTime);
+      setClaimed(camelCaseData.user.cliamed);
     } catch (err) {
       console.error("Start Farming Error > ", err);
       // Consider adding user feedback here
@@ -105,23 +103,23 @@ const TimeCount = () => {
                   // includeDecimals={false}
                   incrementColor='text-gray-400'
                   decrementColor='text-gray-400'
-                  fontSize="xxs:text-xl text-base"
+                  fontSize='xxs:text-xl text-base'
                 />
               </div>
               <div className='flex gap-0 absolute right-0 top-0 justify-center text-sm items-center h-full xxs:gap-1'>
                 <div className='flex'>
                   <p>{miningHour}</p>
-                  <p className="xxs:block hidden">h</p>
-                  <p className="xxs:hidden block">:</p>
+                  <p className='xxs:block hidden'>h</p>
+                  <p className='xxs:hidden block'>:</p>
                 </div>
                 <div className='flex'>
                   <p>{miningMinute}</p>
-                  <p className="xxs:block hidden">m</p>
-                  <p className="xxs:hidden block">:</p>
+                  <p className='xxs:block hidden'>m</p>
+                  <p className='xxs:hidden block'>:</p>
                 </div>
                 <div className='flex'>
                   <p>{miningSecond}</p>
-                  <p className="xxs:block hidden">s</p>
+                  <p className='xxs:block hidden'>s</p>
                 </div>
               </div>
             </div>

@@ -37,7 +37,7 @@ const Splash: React.FC<ISplashProps> = ({
         </div>
         <button
           className='bg-[#4b37dd] w-full h-[2.5rem] leading-none'
-          onClick={() => setTab("Exchange")}>
+          onClick={() => setTab("Channel")}>
           Claim Buffy
         </button>
       </div>
@@ -64,7 +64,7 @@ const Splash: React.FC<ISplashProps> = ({
         </div>
         <button
           className='bg-[#4b37dd] w-full h-[2.5rem] leading-none'
-          onClick={() => setTab("Exchange")}>
+          onClick={() => setTab("Channel")}>
           Claim Buffy
         </button>
       </div>

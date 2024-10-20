@@ -17,12 +17,7 @@ const convertToShorthand = (number: number) => {
 
 function formatNumberWithCommas(number: number): string {
   // Handle undefined or null input
-  if (
-    number === undefined ||
-    number === null ||
-    typeof number !== "number" ||
-    isNaN(number)
-  ) {
+  if (number === undefined || number === null || typeof number !== "number" || isNaN(number)) {
     return "NaN"; // Return "NaN" for invalid inputs
   }
   const roundedNumber = Number(number.toFixed(4));
@@ -41,13 +36,8 @@ function formatNumberWithCommas(number: number): string {
   } else {
     // Round to four decimal places
     const roundedNumber = Number(number.toFixed(4));
-    const [roundedInteger, roundedDecimal] = roundedNumber
-      .toString()
-      .split(".");
-    return `${roundedInteger.replace(
-      /\B(?=(\d{3})+(?!\d))/g,
-      ","
-    )}.${roundedDecimal}`;
+    const [roundedInteger, roundedDecimal] = roundedNumber.toString().split(".");
+    return `${roundedInteger.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}.${roundedDecimal}`;
   }
 }
 
@@ -60,9 +50,7 @@ async function getUserAvatarUrl(userId: string) {
     const profilePhotosData = await profilePhotosResponse.json();
     if (profilePhotosData.ok && profilePhotosData.result.total_count > 0) {
       const fileId = profilePhotosData.result.photos[0].pop().file_id;
-      const fileResponse = await fetch(
-        `https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${fileId}`
-      );
+      const fileResponse = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${fileId}`);
       const fileData = await fileResponse.json();
       if (fileData.ok) {
         const filePath = fileData.result.file_path;
@@ -83,12 +71,7 @@ async function getUserAvatarUrl(userId: string) {
 
 function formatMiningNumber(number: number): string {
   // Handle undefined or null input
-  if (
-    number === undefined ||
-    number === null ||
-    typeof number !== "number" ||
-    isNaN(number)
-  ) {
+  if (number === undefined || number === null || typeof number !== "number" || isNaN(number)) {
     return "NaN"; // Return "NaN" for invalid inputs
   }
   // round to 4 decimal places
@@ -100,14 +83,10 @@ function formatMiningNumber(number: number): string {
     return integerPart + ".0";
   }
   if (decimalPart.length === 1) {
-    const [roundedInteger, roundedDecimal] = roundedNumber
-      .toString()
-      .split(".");
+    const [roundedInteger, roundedDecimal] = roundedNumber.toString().split(".");
     return `${roundedInteger}.${roundedDecimal}`;
   } else {
-    const [roundedInteger, roundedDecimal] = roundedNumber
-      .toString()
-      .split(".");
+    const [roundedInteger, roundedDecimal] = roundedNumber.toString().split(".");
     return `${roundedInteger}.${roundedDecimal}`;
   }
 }
@@ -123,6 +102,25 @@ const getMinutes = (time: number) => {
 const getSeconds = (time: number) => {
   return time % 60;
 };
+
+//=============================================================================== Useful function ============ covert PascalCase to camelCase =================================
+//=============================================================================== There is an error but it's going well =======================================================
+type Convertible<T> = Record<string, (typeof T)[keyof T]>;
+// type Convertible<T> = { // not tested
+//   [K in keyof T]: T[K];
+// };
+
+export const mapToCamelCaseObject = <T>(inputObject: Convertible<T>): Convertible<T> => {
+  let camelCaseResult: Convertible<T> = {};
+  const convertToCamelCase = (input: string): string =>
+    input.length === 0 ? "" : input.charAt(0).toLowerCase() + input.slice(1);
+
+  for (const [key, value] of Object.entries(inputObject)) {
+    camelCaseResult[convertToCamelCase(key)] = value === null ? "unassigned" : value;
+  }
+  return camelCaseResult;
+};
+//=============================================================================================================================================================================
 
 export {
   slicFunc,
