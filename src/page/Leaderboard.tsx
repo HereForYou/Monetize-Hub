@@ -58,7 +58,7 @@ const Leaderboard: React.FC<ILeaderboardProps> = ({ user }) => {
       <div className='w-full'>
         {/* <div className="customCard-container w-full"> */}
         <div className='group pt-6 transition relative duration-300 cursor-default hover:shadow-[0 -8px 0px 0px #2196f3]'>
-          {/* <h2 className="text-[24px] font-extrabold">Top {users.length} $BuffyDrop Miners</h2> */}
+          {/* <h2 className="text-[24px] font-extrabold">Top {users.length} $MonetizeHub Miners</h2> */}
           <h2 className='text-3xl font-extrabold pt-4'>Telegram Wall of Fame</h2>
         </div>
         {/* </div > */}

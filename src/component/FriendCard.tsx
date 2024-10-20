@@ -15,7 +15,7 @@ const FriendCard: React.FC<FriendCardProps> = ({ name, value }) => {
         </div> */}
         <div className='text-sm px-4 w-full'>{name}</div>
       </div>
-      <div className='text-xs'>{"+" + formatNumberWithCommas(value) + " BUFFY"}</div>
+      <div className='text-xs'>{"+" + formatNumberWithCommas(value) + " Point"}</div>
     </div>
   );
 };

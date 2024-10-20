@@ -10,7 +10,7 @@ import { ENDPOINT } from "../data";
 import { useTimeContext } from "../context/TimeContextProvider";
 import { BOT_URL } from "../data";
 
-const desText = `\nJoin me because there’s a reason for spreading the BUFFY buzz. It’s now or never for the BUFFY drop!🍖`;
+const desText = `\nJoin me because there’s a reason for spreading the Point buzz. It’s now or never for the Point drop!🍖`;
 
 const Friends = ({ user, inviteRevenue, modal }: { user: any; inviteRevenue: number; modal: boolean }) => {
   const [showModal, setShowModal] = useState<boolean>(modal);
