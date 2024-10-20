@@ -32,8 +32,8 @@ function App() {
   const [inviteMsg, setInviteMsg] = useState<boolean>(false);
   const [task, setTask] = useState<string[]>([]);
   const [setting, setSetting] = useState<any>({});
-  const [loading, setLoading] = useState(false);
-  const [tab, setTab] = useState<string>("");
+  const [loading, setLoading] = useState(true);
+  const [tab, setTab] = useState<string>("Channel");
   const [totalPoint, setTotalPoint] = useState<number>(0.0);
   const {
     rank,
