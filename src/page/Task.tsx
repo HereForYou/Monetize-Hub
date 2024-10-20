@@ -15,7 +15,6 @@ interface ITaskProps {
   task: string[];
   setTask: (status: string[]) => void;
   setting: any;
-  title: string;
 }
 
 const Task: React.FC<ITaskProps> = ({ user, totalPoint, setTotalPoint, task, setTask, setting }) => {
@@ -130,9 +129,11 @@ const Task: React.FC<ITaskProps> = ({ user, totalPoint, setTotalPoint, task, set
       startTracking();
     }
   };
+
   const handleVisit = (link: any) => {
     window.open(link, "_blank");
   };
+
   const handleItemClick = (item: any) => {
     console.log("handleItemClick button is clicked!", item);
     if (task.includes(item.id)) {
@@ -141,6 +142,7 @@ const Task: React.FC<ITaskProps> = ({ user, totalPoint, setTotalPoint, task, set
       handleFollow(item);
     }
   };
+  
   return (
     <div className='w-full h-[calc(100%-40px)] overflow-x-hidden overflow-y-auto hiddenScrollBar'>
       <div className='flex flex-col justify-center items-center gap-4 text-xl text-[#acacac] font-bold pt-16 pb-6 px-12'>
