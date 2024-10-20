@@ -105,21 +105,21 @@ const getSeconds = (time: number) => {
 
 //=============================================================================== Useful function ============ covert PascalCase to camelCase =================================
 //=============================================================================== There is an error but it's going well =======================================================
-type Convertible<T> = Record<string, (typeof T)[keyof T]>;
+// type Convertible<T> = Record<string, (typeof T)[keyof T]>;
 // type Convertible<T> = { // not tested
 //   [K in keyof T]: T[K];
 // };
 
-export const mapToCamelCaseObject = <T>(inputObject: Convertible<T>): Convertible<T> => {
-  let camelCaseResult: Convertible<T> = {};
-  const convertToCamelCase = (input: string): string =>
-    input.length === 0 ? "" : input.charAt(0).toLowerCase() + input.slice(1);
+// export const mapToCamelCaseObject = <T>(inputObject: Convertible<T>): Convertible<T> => {
+//   let camelCaseResult: Convertible<T> = {};
+//   const convertToCamelCase = (input: string): string =>
+//     input.length === 0 ? "" : input.charAt(0).toLowerCase() + input.slice(1);
 
-  for (const [key, value] of Object.entries(inputObject)) {
-    camelCaseResult[convertToCamelCase(key)] = value === null ? "unassigned" : value;
-  }
-  return camelCaseResult;
-};
+//   for (const [key, value] of Object.entries(inputObject)) {
+//     camelCaseResult[convertToCamelCase(key)] = value === null ? "unassigned" : value;
+//   }
+//   return camelCaseResult;
+// };
 //=============================================================================================================================================================================
 
 export {
