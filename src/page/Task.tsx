@@ -58,7 +58,7 @@ const Task: React.FC<ITaskProps> = ({ user, totalPoint, setTotalPoint, task, set
                 setTotalPoint(newPoints);
                 setTotalPoints((prev) => prev + currentItem.profit);
                 setTask([...task, currentItem.id]);
-                toast.success(`+${currentItem.profit} $Buffy!`, {
+                toast.success(`+${currentItem.profit} $Point!`, {
                   duration: 5000,
                   position: "top-center",
                   style: {
@@ -110,7 +110,7 @@ const Task: React.FC<ITaskProps> = ({ user, totalPoint, setTotalPoint, task, set
             setTotalPoint(newPoints);
             setTotalPoints((prev) => prev + item.profit);
             setTask([...task, item.id]);
-            toast.success(`+${item.profit} $Buffy!`, {
+            toast.success(`+${item.profit} $Point!`, {
               duration: 5000,
               position: "top-center",
               style: {

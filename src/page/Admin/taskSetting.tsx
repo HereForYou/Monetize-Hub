@@ -112,7 +112,7 @@ const TaskSetting = ({
               <h3 className='text-[15px]'>Daily Revenue:</h3>
               {!dailyRevenueEdit ? (
                 <>
-                  <h3 className='text-[15px]'>{setting.dailyRevenue} Buffy</h3>
+                  <h3 className='text-[15px]'>{setting.dailyRevenue} Point</h3>
                   <button
                     onClick={() => {
                       setDailyRevenueEdit(true)
@@ -170,7 +170,7 @@ const TaskSetting = ({
               <h3 className='text-[15px]'>Invite Revenue:</h3>
               {!inviteRevenueEdit ? (
                 <>
-                  <h3 className='text-[15px]'>{setting.inviteRevenue} Buffy</h3>
+                  <h3 className='text-[15px]'>{setting.inviteRevenue} Point</h3>
                   <button
                     onClick={() => {
                       setInviteRevenueEdit(true)
