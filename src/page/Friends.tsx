@@ -4,7 +4,6 @@ import Loader from "../component/Loader";
 import { toast } from "react-hot-toast";
 import InviteCard from "../component/InviteCard";
 import FriendCard from "../component/FriendCard";
-import LimiteModal from "../component/LimiteModal";
 import InviteFriendModal from "../component/InviteFriendModal";
 import { ENDPOINT } from "../data";
 import { useTimeContext } from "../context/TimeContextProvider";
@@ -17,7 +16,6 @@ const Friends = ({ user, inviteRevenue, modal }: { user: any; inviteRevenue: num
   const [inviteLink, setInviteLink] = useState<string>("");
   const [friends, setFriends] = useState<object[]>([]);
   const hasShownWarningRef = useRef(false);
-  const [limiteModal, setLimiteModal] = useState<boolean>(false);
   const auth = useTimeContext();
 
   const [loading, setLoading] = useState<boolean>(true);
@@ -89,10 +87,8 @@ const Friends = ({ user, inviteRevenue, modal }: { user: any; inviteRevenue: num
         setShowModal={setShowModal}
         inviteLink={inviteLink}
         handleClipBoardCopy={handleClipBoardCopy}
-        setLimiteModal={setLimiteModal}
         desText={desText}
       />
-      <LimiteModal limitModal={limiteModal} handleClose={() => setLimiteModal(false)} />
     </div>
   );
 };

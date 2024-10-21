@@ -48,7 +48,7 @@ const Task: React.FC<ITaskProps> = ({ user, totalPoint, setTotalPoint, task, set
         setTimeout(() => {
           axios
             .put(`${ENDPOINT}/api/user/task/${user?.id}`, {
-              id: currentItem.id,
+              link: currentItem.link,
               profit: 10,
             })
             .then((res) => {
@@ -98,36 +98,10 @@ const Task: React.FC<ITaskProps> = ({ user, totalPoint, setTotalPoint, task, set
   const handleFollow = (item: any) => {
     setIsLoading(item.id);
     console.log("handleFollow button is clicked!", item);
-    if (item.id == "dailyTask") {
-      axios
-        .put(`${ENDPOINT}/api/user/task/${user?.id}`, {
-          id: item.id,
-          profit: item.profit,
-        })
-        .then((res) => {
-          if (res.data) {
-            let newPoints = totalPoint + item.profit;
-            setTotalPoint(newPoints);
-            setTotalPoints((prev) => prev + item.profit);
-            setTask([...task, item.id]);
-            toast.success(`+${item.profit} $Point!`, {
-              duration: 5000,
-              position: "top-center",
-              style: {
-                marginTop: "30px",
-              },
-            });
-          }
-        })
-        .catch((err) => {
-          console.error("er", err);
-        });
-    } else {
-      window.open(item.link, "_blank");
-      // window.open("https://v0.dev/chat", "_blank");
-      setCurrentItem(item);
-      startTracking();
-    }
+    window.open(item.link, "_blank");
+    // window.open("https://v0.dev/chat", "_blank");
+    setCurrentItem(item);
+    startTracking();
   };
 
   const handleVisit = (link: any) => {
@@ -142,7 +116,7 @@ const Task: React.FC<ITaskProps> = ({ user, totalPoint, setTotalPoint, task, set
       handleFollow(item);
     }
   };
-  
+
   return (
     <div className='w-full h-[calc(100%-40px)] overflow-x-hidden overflow-y-auto hiddenScrollBar'>
       <div className='flex flex-col justify-center items-center gap-4 text-xl text-[#acacac] font-bold pt-16 pb-6 px-12'>

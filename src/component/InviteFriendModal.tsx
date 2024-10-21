@@ -40,11 +40,6 @@ const InviteFriendModal = ({
           Cancel
         </p>
       </div>
-      <p
-        className='text-left pl-1 cursor-pointer underline hover:text-white  transition-all duration-200'
-        onClick={() => setLimiteModal(true)}>
-        How is the referral reward calculated?
-      </p>
     </div>
   );
 };
