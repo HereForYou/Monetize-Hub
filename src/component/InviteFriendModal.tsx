@@ -6,7 +6,6 @@ const InviteFriendModal = ({
   desText,
   handleClipBoardCopy,
   setShowModal,
-  setLimiteModal,
 }: any) => {
   return (
     <div
