@@ -33,7 +33,7 @@ const Task: React.FC<ITaskProps> = ({ user, totalPoint, setTotalPoint, task, set
           let newPoints = totalPoint + item.profit;
           setTotalPoint(newPoints);
           setTotalPoints((prev) => prev + item.profit);
-          setTask([...task, item.id]);
+          setTask([...task, item.link]);
           toast.success(`+${item.profit} Point!`, {
             duration: 5000,
             position: "top-center",
