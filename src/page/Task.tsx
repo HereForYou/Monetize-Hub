@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
@@ -18,103 +18,37 @@ interface ITaskProps {
 }
 
 const Task: React.FC<ITaskProps> = ({ user, totalPoint, setTotalPoint, task, setTask, setting }) => {
-  const [isLoading, setIsLoading] = useState<string>("");
-  const [count, setCount] = useState<number>(0);
-  const [timeRemaining, setTimeRemaining] = useState<number>(5);
-  const [tracking, setTracking] = useState<boolean>(false);
-  const [currentItem, setCurrentItem] = useState<any>({});
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { setTotalPoints } = useTimeContext();
-
-  const handleMouseEvent = () => {
-    if (tracking) {
-      setCount((prevCount) => prevCount + 1);
-      let c = count;
-      console.log("This is count", c);
-    }
-  };
-
-  const startTracking = () => {
-    setTracking(true);
-    setCount(0); // Reset count when starting to track    https://v0.dev/chat
-  };
-
-  useEffect(() => {
-    if (timeRemaining === 0) {
-      console.log("Time's up!", count, "currentItem", currentItem);
-      setTracking(false);
-      setTimeRemaining(5);
-      if (count == 1) {
-        console.log(">>>>>Hey");
-        setTimeout(() => {
-          axios
-            .put(`${ENDPOINT}/api/user/task/${user?.id}`, {
-              link: currentItem.link,
-              profit: 10,
-            })
-            .then((res) => {
-              if (res.data) {
-                console.log("This is response for task", res.data);
-                let newPoints = totalPoint + currentItem.profit;
-                setTotalPoint(newPoints);
-                setTotalPoints((prev) => prev + currentItem.profit);
-                setTask([...task, currentItem.id]);
-                toast.success(`+${currentItem.profit} $Point!`, {
-                  duration: 5000,
-                  position: "top-center",
-                  style: {
-                    marginTop: "30px",
-                  },
-                });
-              }
-              console.log("heyhey", res.data);
-            })
-            .catch((err) => {
-              console.error("err", err);
-            });
-        }, 300);
-      }
-      setIsLoading("");
-    }
-  }, [timeRemaining]);
-
-  useEffect(() => {
-    let interval: any;
-
-    if (tracking) {
-      interval = setInterval(() => {
-        setTimeRemaining((prevTime) => prevTime - 1);
-      }, 1000);
-      window.addEventListener("click", handleMouseEvent);
-      window.addEventListener("keydown", handleMouseEvent); // Optional: Count key presses as well
-    }
-
-    return () => {
-      clearInterval(interval);
-      window.removeEventListener("click", handleMouseEvent);
-      window.removeEventListener("keydown", handleMouseEvent);
-    };
-  }, [tracking]);
-
-  const handleFollow = (item: any) => {
-    setIsLoading(item.id);
-    console.log("handleFollow button is clicked!", item);
-    window.open(item.link, "_blank");
-    // window.open("https://v0.dev/chat", "_blank");
-    setCurrentItem(item);
-    startTracking();
-  };
-
-  const handleVisit = (link: any) => {
-    window.open(link, "_blank");
-  };
 
   const handleItemClick = (item: any) => {
     console.log("handleItemClick button is clicked!", item);
-    if (task.includes(item.id)) {
-      handleVisit(item.link);
-    } else {
-      handleFollow(item);
-    }
+    setIsLoading(true);
+    axios
+      .put(`${ENDPOINT}/api/user/task/${user?.id}`, {
+        link: item.link,
+        profit: 10,
+      })
+      .then((res) => {
+        if (res.data) {
+          console.log("This is response for task", res.data);
+          let newPoints = totalPoint + item.profit;
+          setTotalPoint(newPoints);
+          setTotalPoints((prev) => prev + item.profit);
+          setTask([...task, item.id]);
+          toast.success(`+${item.profit} Point!`, {
+            duration: 5000,
+            position: "top-center",
+            style: {
+              marginTop: "30px",
+            },
+          });
+          setIsLoading(false);
+        }
+      })
+      .catch((err) => {
+        console.error("err", err);
+      });
   };
 
   return (
@@ -130,7 +64,6 @@ const Task: React.FC<ITaskProps> = ({ user, totalPoint, setTotalPoint, task, set
               <button
                 key={item.id}
                 onClick={() => handleItemClick(item)}
-                disabled={tracking}
                 className='flex w-full justify-between items-center rounded-lg px-3 py-2 cursor-pointer my-2 text-sm bg-[#110d33]'>
                 <div className='flex flex-row gap-1 items-center text-[#acacac]'>
                   <img
