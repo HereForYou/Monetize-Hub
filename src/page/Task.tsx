@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 import { ENDPOINT } from "../data";
 import { formatNumberWithCommas } from "../utils/functions";
-import Loader from "../component/Loader";
 import { useTimeContext } from "../context/TimeContextProvider";
 
 interface ITaskProps {
@@ -18,12 +17,10 @@ interface ITaskProps {
 }
 
 const Task: React.FC<ITaskProps> = ({ user, totalPoint, setTotalPoint, task, setTask, setting }) => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { setTotalPoints } = useTimeContext();
 
   const handleItemClick = (item: any) => {
     console.log("handleItemClick button is clicked!", item);
-    setIsLoading(true);
     axios
       .put(`${ENDPOINT}/api/user/task/${user?.id}`, {
         link: item.link,
@@ -43,7 +40,6 @@ const Task: React.FC<ITaskProps> = ({ user, totalPoint, setTotalPoint, task, set
               marginTop: "30px",
             },
           });
-          setIsLoading(false);
         }
       })
       .catch((err) => {
