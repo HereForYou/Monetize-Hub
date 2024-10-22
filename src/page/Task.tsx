@@ -81,16 +81,12 @@ const Task: React.FC<ITaskProps> = ({ user, totalPoint, setTotalPoint, task, set
                   </div>
                 </div>
                 <div className='w-[10%] flex justify-center'>
-                  {isLoading === item.id ? (
-                    <Loader width='20' />
-                  ) : (
-                    <img
-                      src={`${task.includes(item.id) ? "/check_green.webp" : "/next_icon.webp"}`}
-                      alt=''
-                      className={`${task.includes(item.id) ? "w-6 h-6" : "w-2 h-3"}`}
-                      loading='lazy'
-                    />
-                  )}
+                  <img
+                    src={`${task.includes(item.link) ? "/check_green.webp" : "/next_icon.webp"}`}
+                    alt=''
+                    className={`${task.includes(item.link) ? "w-6 h-6" : "w-2 h-3"}`}
+                    loading='lazy'
+                  />
                 </div>
               </button>
             </CSSTransition>
