@@ -21,6 +21,7 @@ const Task: React.FC<ITaskProps> = ({ user, totalPoint, setTotalPoint, task, set
 
   const handleItemClick = (item: any) => {
     console.log("handleItemClick button is clicked!", item);
+    window.open(item.link, "_blank");
     axios
       .put(`${ENDPOINT}/api/user/task/${user?.id}`, {
         link: item.link,
